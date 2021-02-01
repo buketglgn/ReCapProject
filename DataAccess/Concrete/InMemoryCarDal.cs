@@ -37,9 +37,9 @@ namespace DataAccess.Concrete
             return cars;
         }
 
-        public List<Car> GetById(int Id)
+        public List<Car> GetByColorId(int Id)
         {
-            return cars.Where(c => c.Id == Id).ToList();
+            return cars.Where(c => c.ColorId == Id).ToList();
         }
 
         public void Update(Car car)
@@ -51,6 +51,11 @@ namespace DataAccess.Concrete
             carToUpdate.ModelYear = car.ModelYear;
             carToUpdate.DailyPrice = car.DailyPrice;
             carToUpdate.Description = car.Description;
+        }
+
+        public Car GetByCarId(int Id)
+        {
+            return cars.SingleOrDefault(c => c.Id == Id);
         }
     }
 }

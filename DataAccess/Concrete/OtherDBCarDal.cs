@@ -37,6 +37,16 @@ namespace DataAccess.Concrete
             return otherCars;
         }
 
+        public Car GetByCarId(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Car> GetByColorId(int Id)
+        {
+            return otherCars.Where(c => c.ColorId == Id).ToList();
+        }
+
         public List<Car> GetById(int Id)
         {
             return otherCars.Where(c => c.Id == Id).ToList();

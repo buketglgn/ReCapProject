@@ -11,6 +11,8 @@ namespace DataAccess.Abstract
         void Update(Car car);
         void Delete(Car car);
         List<Car> GetAll();
-        List<Car> GetById(int Id);
+        List<Car> GetByColorId(int Id);
+
+        Car GetByCarId(int Id);
     }
 }
