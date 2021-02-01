@@ -15,10 +15,12 @@ namespace ConsoleUI
 
             Console.WriteLine("-----------------------------------");
             Console.WriteLine("seçilen renge göre arabalar listeleniyor.." );
-            foreach (var car in carManager.GetByColorId(1))
+            foreach (var item in carManager.GetByColorId())
             {
-                Console.WriteLine(car.Description + " Rengi:  " + car.ColorId + " ");
+                Console.WriteLine("Car Id si: " +item.CarId+" rengi: "+item.ColorName+" günlük fiyatı "+item.DailyPrice);
+
             }
+            
             
             foreach (var car in carManager.GetCars())
             {

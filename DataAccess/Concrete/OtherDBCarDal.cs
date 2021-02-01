@@ -10,6 +10,7 @@ namespace DataAccess.Concrete
     public class OtherDBCarDal : ICarDal
     {
         List<Car> otherCars;
+        List<Colors> otherColors;
         public OtherDBCarDal()
         {
             otherCars = new List<Car> {
@@ -19,6 +20,14 @@ namespace DataAccess.Concrete
                 new Car{ Id=4, BrandId=3, ColorId=3, ModelYear=2020, DailyPrice=600, Description="AUDİ A1-other cars"},
                 new Car{ Id=5, BrandId=4, ColorId=1, ModelYear=2019, DailyPrice=550, Description="HONDA CIVIC-other cars"},
 
+            };
+            otherColors = new List<Colors>
+            {
+                new Colors{ ColorId=1, ColorName="Black"},
+                new Colors{ ColorId=2, ColorName="White"},
+                new Colors{ ColorId=3, ColorName="Gray"},
+                new Colors{ ColorId=4, ColorName="Red"},
+                new Colors{ ColorId=5, ColorName="Blue"},
             };
         }
         public void Add(Car car)
@@ -42,9 +51,14 @@ namespace DataAccess.Concrete
             throw new NotImplementedException();
         }
 
-        public List<Car> GetByColorId(int Id)
+        public List<CarDto> GetByColorIdx()
         {
-            return otherCars.Where(c => c.ColorId == Id).ToList();
+            var result = from c in otherCars
+                         join co in otherColors
+                         on c.ColorId equals co.ColorId
+                         select new CarDto { CarId = c.Id, ColorName = co.ColorName, DailyPrice = c.DailyPrice, ModelYear = c.ModelYear };
+
+            return result.ToList();
         }
 
         public List<Car> GetById(int Id)

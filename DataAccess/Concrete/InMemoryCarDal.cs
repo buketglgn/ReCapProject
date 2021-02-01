@@ -10,6 +10,8 @@ namespace DataAccess.Concrete
     public class InMemoryCarDal : ICarDal
     {
         List<Car> cars;
+        List<Colors> colors;
+
         public InMemoryCarDal()
         {
             cars = new List<Car> { 
@@ -19,6 +21,15 @@ namespace DataAccess.Concrete
                 new Car{ Id=4, BrandId=3, ColorId=3, ModelYear=2020, DailyPrice=500, Description="AUDİ A1"},
                 new Car{ Id=5, BrandId=4, ColorId=1, ModelYear=2019, DailyPrice=450, Description="HONDA CIVIC"},
 
+            };
+
+            colors = new List<Colors>
+            {
+                new Colors{ ColorId=1, ColorName="Black"},
+                new Colors{ ColorId=2, ColorName="White"},
+                new Colors{ ColorId=3, ColorName="Gray"},
+                new Colors{ ColorId=4, ColorName="Red"},
+                new Colors{ ColorId=5, ColorName="Blue"},
             };
         }
         public void Add(Car car)
@@ -37,9 +48,16 @@ namespace DataAccess.Concrete
             return cars;
         }
 
-        public List<Car> GetByColorId(int Id)
+        public List<CarDto> GetByColorIdx()
         {
-            return cars.Where(c => c.ColorId == Id).ToList();
+            var result= from c in cars
+                         join co in colors
+                         on c.ColorId equals co.ColorId
+                         select new CarDto { CarId = c.Id, ColorName = co.ColorName, DailyPrice = c.DailyPrice, ModelYear = c.ModelYear };
+
+
+            return result.ToList();
+            
         }
 
         public void Update(Car car)
@@ -57,5 +75,7 @@ namespace DataAccess.Concrete
         {
             return cars.SingleOrDefault(c => c.Id == Id);
         }
+
+       
     }
 }

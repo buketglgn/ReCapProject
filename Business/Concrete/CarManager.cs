@@ -25,9 +25,9 @@ namespace Business.Concrete
             return _carDal.GetByCarId(Id);
         }
 
-        public List<Car> GetByColorId(int ColorId)
+        public List<CarDto> GetByColorId()
         {
-            return _carDal.GetByColorId(ColorId);
+            return _carDal.GetByColorIdx();
         }
     }
 }
