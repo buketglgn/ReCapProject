@@ -14,7 +14,7 @@ namespace ConsoleUI
 
 
             Console.WriteLine("-----------------------------------");
-            Console.WriteLine("seçilen renge göre arabalar listeleniyor.." );
+            Console.WriteLine("Renkleri ile arabalar listeleniyor.." );
             foreach (var item in carManager.GetByColorId())
             {
                 Console.WriteLine("Car Id si: " +item.CarId+" rengi: "+item.ColorName+" günlük fiyatı "+item.DailyPrice);
