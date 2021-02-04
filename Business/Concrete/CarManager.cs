@@ -15,19 +15,30 @@ namespace Business.Concrete
             _carDal = carDal;
 
         }
-        public List<Car> GetCars()
+
+        public void AddCar(Car car)
+        {
+            if(car.DailyPrice>0 && car.Description.Length > 2)
+            {
+                _carDal.Add(car);
+            }
+            
+        }
+
+        public List<Car> GetAll()
         {
             return _carDal.GetAll();
         }
 
-        public Car GetCar(int Id)
+        public List<Car> GetCarsByBrandId(int BrandId)
         {
-            return _carDal.GetByCarId(Id);
+            return _carDal.GetAll(p => p.BrandId ==BrandId);
         }
 
-        public List<CarDto> GetByColorId()
+        public List<Car> GetCarsByColorId(int ColorId)
         {
-            return _carDal.GetByColorIdx();
+            return _carDal.GetAll(c => c.ColorId == ColorId);
+            
         }
     }
 }
