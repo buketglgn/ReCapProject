@@ -1,4 +1,6 @@
-﻿using Entities.Concrete;
+﻿
+using Entities.Concrete;
+using Entities.Concrete.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,8 +15,9 @@ namespace DataAccess.Concrete.EntityFramework
             optionsBuilder.UseSqlServer(@"Server=(localDb)\mssqllocaldb; Database=ReCapDatabase; Trusted_Connection=true");
         }
 
-        public DbSet<Car> Cars { get; set; }
+        public DbSet<Car> Cars { get; set; } 
         public DbSet<Color> Colors { get; set; }
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<DtoCarDetail> DtoCarDetails { get; set; }
     }
 }
