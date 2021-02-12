@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constant;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -18,29 +19,29 @@ namespace Business.Concrete
         public IResult Add(Customer Tentity)
         {
             _customerDal.Add(Tentity);
-            return new SuccessResult("Müsteri eklendi");
+            return new SuccessResult(Messages.CustomerAdded);
         }
 
         public IResult Delete(int Id)
         {
             _customerDal.Delete(p=>p.UserId==Id);
-            return new SuccessResult("Müsteri silindi");
+            return new SuccessResult(Messages.CustomerDeleted);
         }
 
         public IDataResult<List<Customer>> GetAll()
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), "Müsteriler listelendi");
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());
         }
 
         public IDataResult<Customer> GetById(int Id)
         {
-            return new SuccessDataResult<Customer>(_customerDal.Get(p => p.UserId == Id), "müsteri listelendi");
+            return new SuccessDataResult<Customer>(_customerDal.Get(p => p.UserId == Id));
         }
 
         public IResult Update(Customer Tentity)
         {
             _customerDal.Update(Tentity);
-            return new SuccessResult("Müsteri güncellendi");
+            return new SuccessResult(Messages.UserUpdated);
         }
     }
 }

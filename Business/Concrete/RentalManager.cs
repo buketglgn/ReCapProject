@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constant;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -26,11 +27,11 @@ namespace Business.Concrete
             var result = _rental.Get(p => p.CarId == Tentity.CarId && p.ReturnDate == null);
             if (result != null)
             {
-                return new ErrorResult("arac suan kullanımda ! ");
+                return new ErrorResult(Messages.RentalBusy);
             }
 
             _rental.Add(Tentity);
-            return new SuccessResult("Arac kiralandı.");
+            return new SuccessResult(Messages.RentalAdded);
         }
 
         //rental tablosundan silindi.
@@ -39,14 +40,14 @@ namespace Business.Concrete
             var result = _rental.Get(p => p.Id == Id);
             if (result == null)
             {
-                return new ErrorResult("böyle bir kayıt bulunamadı");
+                return new ErrorResult(Messages.NoRecording);
             }
             if (result.ReturnDate == null)
             {
-                return new ErrorResult("arac suan kullanımda silinemez! ");
+                return new ErrorResult(Messages.RentalBusy);
             }
             _rental.Delete(p => p.Id == Id);
-            return new SuccessResult("ARAÇ RENTAL TABLOSUNDAN SİLİNDİ");
+            return new SuccessResult(Messages.RentalDeleted);
 
         }
 
@@ -57,7 +58,7 @@ namespace Business.Concrete
             var result = _rental.Get(p => p.Id == rentalId);
             result.ReturnDate = DateTime.Now.Date;
             Update(result);
-            return new SuccessResult("Araç Teslim Edildi.");
+            return new SuccessResult(Messages.RentalDelivered);
 
         }
 
@@ -85,7 +86,7 @@ namespace Business.Concrete
         public IResult Update(Rental Tentity)
         {
             _rental.Update(Tentity);
-            return new SuccessResult();
+            return new SuccessResult(Messages.RentalUpdated);
         }
         public IDataResult<List<DtoRentalDetail>> GetRentalDetails()
         {
