@@ -73,12 +73,12 @@ namespace Business.Concrete
         }
 
 
-        public IDataResult<List<Rental>> GetAvailableCars()
+        public IDataResult<List<Rental>> InUse()
         {
             return new SuccessDataResult<List<Rental>>(_rental.GetAll(p => p.ReturnDate == null));
         }
 
-        public IDataResult<List<Rental>> GetUnAvailableCars()
+        public IDataResult<List<Rental>> NotInUse()
         {
             return new SuccessDataResult<List<Rental>>(_rental.GetAll(p => p.ReturnDate != null));
         }

@@ -7,5 +7,6 @@ namespace Business.Abstract
 {
    public interface ICustomerService : IEntityServiceBase<Customer>
     {
+
     }
 }
