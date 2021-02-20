@@ -15,7 +15,7 @@ namespace Business.Constant
         public static string RentalAdded = "Araç Kiralandı (Rental tablosuna eklendi)";
         public static string RentalDeleted = "Arac Rental Tablsoundan Silindi";
         public static string RentalDelivered = "Araç Teslim Edildi";
-        public static string RentalBusy = "Araç Suan Kullanımda";
+        public static string RentalBusy = "Araç Suan Kullanımda, Kiralanamaz..";
         public static string RentalUpdated = "Arac Bilgisi Tabloda güncellendi";
         public static string NoRecording = "Kayıt Bulunamadı";
         public static string CarAdded = "Yeni Arac Sisteme Eklendi";

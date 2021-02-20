@@ -1,4 +1,5 @@
-﻿using DataAccess.Concrete.EntityFramework;
+﻿using Business.Constant;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using FluentValidation;
 using System;
@@ -13,8 +14,9 @@ namespace Business.ValidationRules.FluentValidation
 
         public RentalValidator()
         {
-
-            RuleFor(p => p.ReturnDate).NotNull();
+            //returnDate i null olan araclar kullanımda demek ve kiralanamaz.
+            RuleFor(p => p.ReturnDate).NotNull().WithMessage(Messages.RentalBusy);
+            RuleFor(p => p.RentDate).NotNull();
 
         }
 

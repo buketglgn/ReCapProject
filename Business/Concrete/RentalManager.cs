@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Constant;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofact.Validation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -23,6 +25,8 @@ namespace Business.Concrete
         {
             _rental = rental;
         }
+
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental Tentity)
         {
             //bu degerlere sahip bir sey döndürüyorsa arac kullanımdadır.
@@ -31,13 +35,6 @@ namespace Business.Concrete
             //{
             //    return new ErrorResult(Messages.RentalBusy);
             //}
-            var context = new ValidationContext<Rental>(Tentity);
-            RentalValidator rentalValidator = new RentalValidator();
-            var result = rentalValidator.Validate(context);
-            if (!result.IsValid)
-            {
-                throw new ValidationException(result.Errors);
-            }
 
             _rental.Add(Tentity);
             return new SuccessResult(Messages.RentalAdded);
@@ -92,6 +89,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>(_rental.GetAll(p => p.ReturnDate != null));
         }
 
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Update(Rental Tentity)
         {
             _rental.Update(Tentity);

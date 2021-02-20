@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofact.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -19,18 +21,19 @@ namespace Business.Concrete
 
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (car.DailyPrice > 0 && car.Description.Length > 2)
-            {
-                _carDal.Add(car);
+            //if (car.DailyPrice > 0 && car.Description.Length > 2)
+            //{
+            //    _carDal.Add(car);
 
-                return new SuccessResult(Messages.CarAdded);
-            }
-            else
-            {
-                return new ErrorResult(Messages.CarDidntAdded);
-            }
+              return new SuccessResult(Messages.CarAdded);
+            //}
+            //else
+            //{
+            //    return new ErrorResult(Messages.CarDidntAdded);
+            //}
 
         }
     public IResult Delete(int CarId)
@@ -69,6 +72,7 @@ namespace Business.Concrete
 
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
             _carDal.Update(car);
