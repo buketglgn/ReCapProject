@@ -14,11 +14,18 @@ namespace Business.ValidationRules.FluentValidation
 
         public RentalValidator()
         {
-            //returnDate i null olan araclar kullanımda demek ve kiralanamaz.
-            RuleFor(p => p.ReturnDate).NotNull().WithMessage(Messages.RentalBusy);
-            RuleFor(p => p.RentDate).NotNull();
 
+            
+            RuleFor(p => p.RentDate).NotEmpty();
         }
 
     }
 }
+
+
+
+        
+
+        
+    
+

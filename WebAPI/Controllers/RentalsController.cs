@@ -73,6 +73,16 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+        [HttpPost("deliver")]
+        public IActionResult Deliver(int id)
+        {
+            var result = _rentalService.Deliver(id);
+            if (result.Success)
+            {
+                return Ok(result.Message);
+            }
+            return BadRequest(result.Message);
+        }
 
 
         [HttpPost("update")]

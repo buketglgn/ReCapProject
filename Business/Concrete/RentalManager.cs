@@ -26,17 +26,20 @@ namespace Business.Concrete
             _rental = rental;
         }
 
-        [ValidationAspect(typeof(RentalValidator))]
+        //[ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental Tentity)
         {
             //bu degerlere sahip bir sey döndürüyorsa arac kullanımdadır.
-            //var result = _rental.Get(p => p.CarId == Tentity.CarId && p.ReturnDate == null);
-            //if (result != null)
-            //{
-            //    return new ErrorResult(Messages.RentalBusy);
-            //}
-
-            _rental.Add(Tentity);
+            var result = _rental.Get(p => p.CarId == Tentity.CarId && p.ReturnDate == null);
+            if (result != null)
+            {
+                return new ErrorResult(Messages.RentalBusy);
+            }
+            else
+            {
+                _rental.Add(Tentity);
+            }
+            
             return new SuccessResult(Messages.RentalAdded);
         }
 
