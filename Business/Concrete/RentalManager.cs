@@ -1,9 +1,11 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.FluentValidation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Concrete.DTOs;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -24,10 +26,17 @@ namespace Business.Concrete
         public IResult Add(Rental Tentity)
         {
             //bu degerlere sahip bir sey döndürüyorsa arac kullanımdadır.
-            var result = _rental.Get(p => p.CarId == Tentity.CarId && p.ReturnDate == null);
-            if (result != null)
+            //var result = _rental.Get(p => p.CarId == Tentity.CarId && p.ReturnDate == null);
+            //if (result != null)
+            //{
+            //    return new ErrorResult(Messages.RentalBusy);
+            //}
+            var context = new ValidationContext<Rental>(Tentity);
+            RentalValidator rentalValidator = new RentalValidator();
+            var result = rentalValidator.Validate(context);
+            if (!result.IsValid)
             {
-                return new ErrorResult(Messages.RentalBusy);
+                throw new ValidationException(result.Errors);
             }
 
             _rental.Add(Tentity);
