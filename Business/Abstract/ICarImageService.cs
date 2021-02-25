@@ -6,8 +6,8 @@ using System.Text;
 
 namespace Business.Abstract
 {
-   public interface IBrandService : IEntityServiceBase<Brand>
+   public interface ICarImageService: IEntityServiceBase<CarImage>
     {
-      
+        IDataResult<List<CarImage>> GetAllImagesByCarId(int CarId);
     }
 }

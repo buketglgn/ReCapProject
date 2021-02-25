@@ -3,6 +3,7 @@ using Business.Constant;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofact.Validation;
 using Core.CrossCuttingConcerns.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -26,34 +27,26 @@ namespace Business.Concrete
             _rental = rental;
         }
 
-        //[ValidationAspect(typeof(RentalValidator))]
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental Tentity)
         {
-            //bu degerlere sahip bir sey döndürüyorsa arac kullanımdadır.
-            var result = _rental.Get(p => p.CarId == Tentity.CarId && p.ReturnDate == null);
-            if (result != null)
+            IResult results = BusinessRules.Run(CheckIfCarInUse(Tentity.CarId));
+            if (results != null)
             {
-                return new ErrorResult(Messages.RentalBusy);
+                return results;
             }
-            else
-            {
-                _rental.Add(Tentity);
-            }
-            
-            return new SuccessResult(Messages.RentalAdded);
+
+            _rental.Add(Tentity);
+             return new SuccessResult(Messages.RentalAdded);
         }
 
         //rental tablosundan silindi.
         public IResult Delete(int Id)
         {
-            var result = _rental.Get(p => p.Id == Id);
-            if (result == null)
+            IResult results = BusinessRules.Run(CheckIfDelete(Id));
+            if (results != null)
             {
-                return new ErrorResult(Messages.NoRecording);
-            }
-            if (result.ReturnDate == null)
-            {
-                return new ErrorResult(Messages.RentalBusy);
+                return results;
             }
             _rental.Delete(p => p.Id == Id);
             return new SuccessResult(Messages.RentalDeleted);
@@ -64,9 +57,12 @@ namespace Business.Concrete
         //teslim edilme tarihi verildi.
         public IResult Deliver(int rentalId)
         {
-            var result = _rental.Get(p => p.Id == rentalId);
-            result.ReturnDate = DateTime.Now.Date;
-            Update(result);
+            IResult results = BusinessRules.Run(CheckIfDeliver(rentalId));
+            if (results != null)
+            {
+                return results;
+            }
+
             return new SuccessResult(Messages.RentalDelivered);
 
         }
@@ -103,6 +99,44 @@ namespace Business.Concrete
             return new SuccessDataResult<List<DtoRentalDetail>>(_rental.GetRentalDetails());
 
 
+        }
+
+        private IResult CheckIfCarInUse(int carId)
+        {
+            //bu degerlere sahip bir sey döndürüyorsa arac kullanımdadır
+            var result = _rental.Get(p => p.CarId ==carId && p.ReturnDate == null);
+            if (result != null)
+            {
+                return new ErrorResult(Messages.RentalBusy);
+            }
+            return new SuccessResult();
+
+        }
+
+        private IResult CheckIfDelete(int Id)
+        {
+            var result = _rental.Get(p => p.Id == Id);
+            if (result == null)
+            {
+                return new ErrorResult(Messages.NoRecording);
+            }
+            if (result.ReturnDate == null)
+            {
+                return new ErrorResult(Messages.RentalBusy);
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfDeliver(int rentalId)
+        {
+            var result = _rental.Get(p => p.Id == rentalId);
+            if (result.ReturnDate != null)
+            {
+                return new ErrorResult(Messages.NoRecording);
+            }
+            result.ReturnDate = DateTime.Now.Date;
+            Update(result);
+            return new SuccessResult();
         }
     }
 }
