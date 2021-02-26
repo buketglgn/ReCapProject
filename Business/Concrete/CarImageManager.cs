@@ -26,15 +26,19 @@ namespace Business.Concrete
             {
                 return results;
             }
+            var addedCarImage = CreatedFile(carImage).Data;
             _carImageDal.Add(carImage);
             return new SuccessResult();
         }
 
-        public IResult Delete(int Id)
+        public IResult Delete(CarImage carImage)
         {
-            var ImageDelete = _carImageDal.Get(p => p.Id == Id);
-            File.Delete(ImageDelete.ImagePath);
-            _carImageDal.Delete(p => p.Id == Id);
+            var results = BusinessRules.Run(CheckIfDeleteImage(carImage.Id));
+            if (results !=null)
+            {
+                return results;
+            }
+            File.Delete(carImage.ImagePath);
             return new SuccessResult("Image Deleted");
 
 
@@ -65,12 +69,16 @@ namespace Business.Concrete
             return new SuccessResult("Image updated");
         }
 
-        private string ImagePath(CarImage carImage)
+        private IResult CheckIfDeleteImage(int Id)
         {
-            string namePathRule = "CAR-" + carImage.CarId + "-" + DateTime.Now.ToShortDateString();
-            return AppDomain.CurrentDomain.BaseDirectory + "Images\\" + namePathRule + ".jpg";
+            var result = _carImageDal.Get(p => p.Id == Id);
+            if (result == null)
+            {
+                return new ErrorResult("Bu Id de Image yok.");
+                
+            }
+            return new SuccessResult();
         }
-
         private IResult CheckIfDefaultImages(int Id)
         {
             var DefaultPath = AppDomain.CurrentDomain.BaseDirectory + "C:\\Users\\Lenovo\\Desktop\\walpapers\\logo.jpg";
@@ -93,13 +101,11 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IDataResult<CarImage> CreatedFile(CarImage carImage, string extension)
+        private IDataResult<CarImage> CreatedFile(CarImage carImage)
         {
             string path = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName + @"\Image");
             var creatingUniqueFilename = Guid.NewGuid().ToString("N")
-                + "_" + DateTime.Now.Month + "_"
-                + DateTime.Now.Day + "_"
-                + DateTime.Now.Year + extension;
+                +"CAR-"+carImage.CarId+"-"+DateTime.Now.ToShortDateString();
 
             string source = Path.Combine(carImage.ImagePath);
 

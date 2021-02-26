@@ -36,9 +36,9 @@ namespace Business.Concrete
             //}
 
         }
-    public IResult Delete(int CarId)
+    public IResult Delete(Car car)
         {
-            _carDal.Delete(p => p.Id == CarId);
+            _carDal.Delete(p => p.Id == car.Id);
             return new ErrorResult(Messages.CarDeleted);
 
         }

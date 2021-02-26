@@ -23,9 +23,9 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ColorAdded);
         }
 
-        public IResult Delete(int colorID)
+        public IResult Delete(Color color)
         {
-            _colorDal.Delete(p => p.ColorId == colorID);
+            _colorDal.Delete(p => p.ColorId == color.ColorId);
             return new SuccessResult(Messages.ColorDeleted);
         }
 

@@ -30,6 +30,7 @@ namespace WebAPI.Controllers
         {
             string path = _webHostEnvironment.WebRootPath + "\\uploads\\";
             var newGuidPath = Guid.NewGuid().ToString() + Path.GetExtension(objectFile.FileName);
+                
 
             if (!Directory.Exists(path))
             {
@@ -76,6 +77,29 @@ namespace WebAPI.Controllers
             if (result.Success)
             {
                 return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [HttpPost("delete")]
+        public IActionResult Delete(CarImage carImage)
+        {
+            var result = _carImageService.Delete(carImage);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+
+        }
+
+        [HttpPost("update")]
+        public IActionResult Update(CarImage carImage)
+        {
+            var result = _carImageService.Update(carImage);
+            if (result.Success)
+            {
+                return Ok(result);
             }
             return BadRequest(result.Message);
         }

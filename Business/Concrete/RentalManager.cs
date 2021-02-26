@@ -41,14 +41,14 @@ namespace Business.Concrete
         }
 
         //rental tablosundan silindi.
-        public IResult Delete(int Id)
+        public IResult Delete(Rental rental)
         {
-            IResult results = BusinessRules.Run(CheckIfDelete(Id));
+            IResult results = BusinessRules.Run(CheckIfDelete(rental.Id));
             if (results != null)
             {
                 return results;
             }
-            _rental.Delete(p => p.Id == Id);
+            _rental.Delete(p => p.Id == rental.Id);
             return new SuccessResult(Messages.RentalDeleted);
 
         }

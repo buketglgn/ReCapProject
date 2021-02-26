@@ -34,10 +34,10 @@ namespace ConsoleUI
 
             RentalManager rentalManager = new RentalManager(new EfRentalDal());
 
-            foreach (var rentalDetail in rentalManager.GetRentalDetails().Data)
-            {
-                Console.WriteLine(rentalDetail.UserName+"/"+rentalDetail.Descripton+"/"+rentalDetail.DailyPrice+"/"+rentalDetail.RentDate);
-            }
+            //foreach (var rentalDetail in rentalManager.GetRentalDetails().Data)
+            //{
+            //    Console.WriteLine(rentalDetail.UserName+"/"+rentalDetail.Descripton+"/"+rentalDetail.DailyPrice+"/"+rentalDetail.RentDate);
+            //}
             //foreach (var item in rentalManager.GetAvailableCars().Data)
             //{
             //    Console.WriteLine(item.Id+"/"+item.CarId+"/"+item.CustomerId+"/"+item.RentDate);
@@ -70,13 +70,13 @@ namespace ConsoleUI
             // Console.WriteLine(rentalManager.Deliver(15).Message);
         }
         
-        private static void CrudOperationsOfCar()
-        {
-            CarManager carManager = new CarManager(new EfCarDal());
-             foreach (var detail in carManager.GetCarDetail().Data)
-                        {
-                            Console.WriteLine(detail.Description+"/"+ detail.BrandName+"/"+detail.ColorName+"/" +detail.DailyPrice);
-                        }
+        //private static void CrudOperationsOfCar()
+        //{
+        //    CarManager carManager = new CarManager(new EfCarDal());
+        //     foreach (var detail in carManager.GetCarDetail().Data)
+        //                {
+        //                    Console.WriteLine(detail.Description+"/"+ detail.BrandName+"/"+detail.ColorName+"/" +detail.DailyPrice);
+        //                }
       
            // carManager.AddCar(new Car { Id = 7, ColorId = 3, BrandId = 2, ModelYear = new DateTime(2018, 7, 9), DailyPrice = 500, Description = "YENİ EKLENEN " });
            // carManager.Update(new Car { Id = 7, ColorId = 3, BrandId = 2, ModelYear = new DateTime(2018, 7, 9), DailyPrice = 555, Description = "YENİ EKLENENFiyatGüncellendi 2 . kez " } );
@@ -111,39 +111,39 @@ namespace ConsoleUI
             //}
         }
 
-        private static void CrudOperationsOfColor()
-        {
-            ColorManager colorManager = new ColorManager(new EfColorDal());
-            Console.WriteLine("COLOR Id si 2 olan gösterilitor..");
-            Console.WriteLine(colorManager.GetById(2).Data.ColorName);
+        //private static void CrudOperationsOfColor()
+        //{
+        //    ColorManager colorManager = new ColorManager(new EfColorDal());
+        //    Console.WriteLine("COLOR Id si 2 olan gösterilitor..");
+        //    Console.WriteLine(colorManager.GetById(2).Data.ColorName);
 
 
-            colorManager.Add(new Color { ColorId = 6, ColorName = "yellow" });
-            colorManager.Update(new Color { ColorId = 6, ColorName = "NewYellow" });
-            colorManager.Delete(5);
+        //    colorManager.Add(new Color { ColorId = 6, ColorName = "yellow" });
+        //    colorManager.Update(new Color { ColorId = 6, ColorName = "NewYellow" });
+        //    colorManager.Delete(5);
 
-                foreach (var color in colorManager.GetAll().Data)
-                            {
-                                Console.WriteLine(color.ColorName);
-                            }
+        //        foreach (var color in colorManager.GetAll().Data)
+        //                    {
+        //                        Console.WriteLine(color.ColorName);
+        //                    }
             
            
             
-        }
-        private static void CrudOperationsOfBrand()
-        {
-            BrandManager brandManager = new BrandManager(new EfBrandDal());
-            Console.WriteLine(brandManager.GetById(2).Data.BrandName);
-            brandManager.Add(new Brand { BrandId = 5, BrandName = "Ferrari" });
-            brandManager.Update(new Brand { BrandId = 6, BrandName = "NewBrandd" });
-            brandManager.Delete(5);
+        //}
+        //private static void CrudOperationsOfBrand()
+        //{
+//            BrandManager brandManager = new BrandManager(new EfBrandDal());
+//            Console.WriteLine(brandManager.GetById(2).Data.BrandName);
+//            brandManager.Add(new Brand { BrandId = 5, BrandName = "Ferrari" });
+//            brandManager.Update(new Brand { BrandId = 6, BrandName = "NewBrandd" });
+//            brandManager.Delete(5);
 
-            foreach (var brand in brandManager.GetAll().Data)
-            {
-                Console.WriteLine(brand.BrandName);
-            }
-        }
+//            foreach (var brand in brandManager.GetAll().Data)
+//            {
+//                Console.WriteLine(brand.BrandName);
+//            }
+//        }
 
 
-    }
+//}
 }
