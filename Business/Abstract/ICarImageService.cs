@@ -9,5 +9,7 @@ namespace Business.Abstract
    public interface ICarImageService: IEntityServiceBase<CarImage>
     {
         IDataResult<List<CarImage>> GetAllImagesByCarId(int CarId);
+        
+
     }
 }

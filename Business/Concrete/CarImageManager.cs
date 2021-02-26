@@ -12,7 +12,7 @@ namespace Business.Concrete
 {
     public class CarImageManager : ICarImageService
     {
-        int i = 0;
+        
         ICarImageDal _carImageDal;
         public CarImageManager(ICarImageDal carImageDal)
         {
@@ -21,16 +21,14 @@ namespace Business.Concrete
         }
         public IResult Add(CarImage carImage)
         {
-            if (_carImageDal.GetAll(p => p.CarId == carImage.CarId).Count > 4)
+            var results = BusinessRules.Run(CheckIfImageCount(carImage.CarId));
+            if (results!=null)
             {
-                return new ErrorResult("bu araca ait 5 ten fazla resim olamaz.");
+                return results;
             }
-
-            string createPath = ImagePath(carImage);
-            File.Copy(carImage.ImagePath, createPath);
-            carImage.ImagePath = createPath;
-            carImage.Date = DateTime.Now;
-            _carImageDal.Add(carImage);
+            carImage.Date = DateTime.Now.Date;
+            var addedCarImage = CreatedFile(carImage).Data;
+            _carImageDal.Add(addedCarImage);
             return new SuccessResult("resim eklendi");
         }
 
@@ -64,17 +62,14 @@ namespace Business.Concrete
 
         public IResult Update(CarImage carImage)
         {
-            var updatePath = ImagePath(carImage);
-            File.Copy(carImage.ImagePath, updatePath);
-            File.Delete(carImage.ImagePath);
-            carImage.ImagePath = updatePath;
+           
             _carImageDal.Update(carImage);
             return new SuccessResult("Image updated");
         }
 
         private string ImagePath(CarImage carImage)
         {
-            string namePathRule = "CAR-" + carImage.CarId + "-" + DateTime.Now.ToShortDateString() + i++;
+            string namePathRule = "CAR-" + carImage.CarId + "-" + DateTime.Now.ToShortDateString();
             return AppDomain.CurrentDomain.BaseDirectory + "Images\\" + namePathRule + ".jpg";
         }
 
@@ -89,6 +84,42 @@ namespace Business.Concrete
             return null;
         }
 
-        
+        private IResult CheckIfImageCount(int CarId)
+        {
+            var result = _carImageDal.GetAll(p => p.CarId == CarId);
+            if(result.Count >= 5)
+            {
+                return new ErrorResult("bu araca ait 5 ten fazla resim olamaz.");
+
+            }
+            return new SuccessResult();
+        }
+
+         private IDataResult<CarImage> CreatedFile(CarImage carImage)
+        {
+            string path = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName + @"\Images");
+            var differentFileName = Guid.NewGuid().ToString() + "-" + DateTime.Now.ToShortDateString();
+
+            string source = Path.Combine(carImage.ImagePath);
+            string result = $@"{path}\{differentFileName}";
+            try
+            {
+
+                File.Move(source, path + @"\" + differentFileName);
+            }
+            catch (Exception exception)
+            {
+
+                return new ErrorDataResult<CarImage>(exception.Message);
+            }
+
+            return new SuccessDataResult<CarImage>
+                (new CarImage 
+                { Id = carImage.Id, CarId = carImage.CarId, ImagePath = result, Date = DateTime.Now }
+                , "resim eklendi");
+           
+        }
+
+       
     }
 }
