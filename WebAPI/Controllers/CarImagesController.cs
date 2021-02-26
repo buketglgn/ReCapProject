@@ -26,26 +26,34 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> Add([FromForm] FileUpload objectFile, [FromForm] CarImage carImage)
+        public IActionResult Add([FromForm(Name = ("CarImage"))] IFormFile objectFile, [FromForm] CarImage carImage)
         {
-            System.IO.FileInfo fileInfo = new System.IO.FileInfo(objectFile.files.FileName);
-            string fileExtension = fileInfo.Extension;
+            string path = _webHostEnvironment.WebRootPath + "\\uploads\\";
+            var newGuidPath = Guid.NewGuid().ToString() + Path.GetExtension(objectFile.FileName);
 
-            //var result = Guid.NewGuid().ToString() +
-            //    "CAR-" + carId+  "-" + DateTime.Now.ToShortDateString()+ fileExtension;
-         
-
-            var path = Path.GetTempFileName();
-            if (objectFile.files.Length > 0)
-                using (var stream = new FileStream(path, FileMode.Create))
-                    await objectFile.files.CopyToAsync(stream);
-            var carimage = new CarImage { CarId = carImage.CarId, ImagePath = path, Date = DateTime.Now };
-            var result = _carImageService.Add(carimage);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            using (FileStream fileStream = System.IO.File.Create(path + newGuidPath))
+            {
+                objectFile.CopyTo(fileStream);
+                fileStream.Flush();
+            }
+            if (objectFile == null)
+            {
+                carImage.ImagePath = path + "default.png";
+            }
+            var result = _carImageService.Add(new CarImage
+            {
+                CarId = carImage.CarId,
+                Date = DateTime.Now,
+                ImagePath = newGuidPath
+            });
             if (result.Success)
             {
                 return Ok(result);
             }
-
             return BadRequest(result);
         }
 

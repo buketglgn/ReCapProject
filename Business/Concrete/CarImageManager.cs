@@ -26,10 +26,8 @@ namespace Business.Concrete
             {
                 return results;
             }
-            carImage.Date = DateTime.Now.Date;
-            var addedCarImage = CreatedFile(carImage).Data;
-            _carImageDal.Add(addedCarImage);
-            return new SuccessResult("resim eklendi");
+            _carImageDal.Add(carImage);
+            return new SuccessResult();
         }
 
         public IResult Delete(int Id)
@@ -95,17 +93,22 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-         private IDataResult<CarImage> CreatedFile(CarImage carImage)
+        private IDataResult<CarImage> CreatedFile(CarImage carImage, string extension)
         {
-            string path = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName + @"\Images");
-            var differentFileName = Guid.NewGuid().ToString() + "-" + DateTime.Now.ToShortDateString();
+            string path = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName + @"\Image");
+            var creatingUniqueFilename = Guid.NewGuid().ToString("N")
+                + "_" + DateTime.Now.Month + "_"
+                + DateTime.Now.Day + "_"
+                + DateTime.Now.Year + extension;
 
             string source = Path.Combine(carImage.ImagePath);
-            string result = $@"{path}\{differentFileName}";
+
+            string result = $@"{path}\{creatingUniqueFilename}";
+
             try
             {
 
-                File.Move(source, path + @"\" + differentFileName);
+                File.Move(source, path + @"\" + creatingUniqueFilename);
             }
             catch (Exception exception)
             {
@@ -113,13 +116,9 @@ namespace Business.Concrete
                 return new ErrorDataResult<CarImage>(exception.Message);
             }
 
-            return new SuccessDataResult<CarImage>
-                (new CarImage 
-                { Id = carImage.Id, CarId = carImage.CarId, ImagePath = result, Date = DateTime.Now }
-                , "resim eklendi");
-           
+            return new SuccessDataResult<CarImage>(new CarImage { Id = carImage.Id, CarId = carImage.CarId, ImagePath = result, Date = DateTime.Now },"resim eklendi");
         }
 
-       
+
     }
 }
