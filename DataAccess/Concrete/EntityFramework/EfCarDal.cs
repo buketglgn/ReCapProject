@@ -13,7 +13,7 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfCarDal : EfEntityRepositoryBase<Car, ReCapDatabaseContext>, ICarDal
     {
-        public List<DtoCarDetail> GetCarDetails()
+        public List<DtoCarDetail> GetCarDetails(Expression<Func<DtoCarDetail, bool>> filter = null)
         {
             using (ReCapDatabaseContext context = new ReCapDatabaseContext())
             {
@@ -35,7 +35,9 @@ namespace DataAccess.Concrete.EntityFramework
                              };
 
 
-                return result.ToList();
+
+                return filter == null ? result.ToList() : result.Where(filter).ToList();
+               
             }
 
 
