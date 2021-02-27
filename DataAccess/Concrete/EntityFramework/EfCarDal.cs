@@ -15,7 +15,7 @@ namespace DataAccess.Concrete.EntityFramework
     {
         public List<DtoCarDetail> GetCarDetails()
         {
-            using (ReCapDatabaseContext context=new ReCapDatabaseContext())
+            using (ReCapDatabaseContext context = new ReCapDatabaseContext())
             {
                 var result = from c in context.Cars
                              join b in context.Brands
@@ -26,15 +26,22 @@ namespace DataAccess.Concrete.EntityFramework
                              on c.Id equals ci.CarId
                              select new DtoCarDetail
                              {
+                                 Id = c.Id,
                                  Description = c.Description,
                                  BrandName = b.BrandName,
                                  ColorName = co.ColorName,
                                  DailyPrice = c.DailyPrice,
-                                 ImagePath=ci.ImagePath
+                                 ImagePath = ci.ImagePath
                              };
+
 
                 return result.ToList();
             }
+
+
+
+
+
         }
     }
 }

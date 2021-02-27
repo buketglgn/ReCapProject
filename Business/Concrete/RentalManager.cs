@@ -48,7 +48,7 @@ namespace Business.Concrete
             {
                 return results;
             }
-            _rental.Delete(p => p.Id == rental.Id);
+            _rental.Delete(rental);
             return new SuccessResult(Messages.RentalDeleted);
 
         }

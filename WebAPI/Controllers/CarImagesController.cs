@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Models;
+
 
 namespace WebAPI.Controllers
 {
@@ -70,10 +70,21 @@ namespace WebAPI.Controllers
         }
 
         
-        [HttpGet("getImagesById")]
+        [HttpGet("getImagesByCarId")]
         public IActionResult GetAllImagesByCarId(int Id)
         {
             var result = _carImageService.GetAllImagesByCarId(Id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [HttpGet("getImagesById")]
+        public IActionResult GetAllImagesById(int Id)
+        {
+            var result = _carImageService.GetById(Id);
             if (result.Success)
             {
                 return Ok(result.Data);
@@ -102,6 +113,17 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result.Message);
+        }
+
+        [HttpGet("GetImageByCarID")]
+        public IActionResult GetImageByCarID(int carId)
+        {
+            var result = _carImageService.GetAllImagesByCarId(carId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

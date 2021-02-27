@@ -27,7 +27,7 @@ namespace Business.Concrete
 
         public IResult Delete(Brand brand)
         {
-            _brandDal.Delete(p => p.BrandId == brand.BrandId);
+            _brandDal.Delete(brand);
             return new SuccessResult(Messages.BrandDeleted);
         }
 
