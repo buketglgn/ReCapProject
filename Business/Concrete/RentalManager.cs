@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofact.Validation;
@@ -27,6 +28,7 @@ namespace Business.Concrete
             _rental = rental;
         }
 
+        [SecuredOperation("Kullanici")]
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental Tentity)
         {

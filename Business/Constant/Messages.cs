@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Core.Entities.Concrete;
+using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Business.Constant
@@ -28,8 +30,12 @@ namespace Business.Constant
         public static string ColorAdded = "Color Eklendi";
         public static string ColorDeleted = "Color Silindi";
         public static string ColorUpdated = "Color Güncellendi";
-
-
-
+        public static string UserNotFound = "Kullanıcı Bulunumadı.";
+        public static string IncorrectPassword = "Parola hatalı.";
+        public static string SuccessfulLogin = "Login başarılı";
+        public static string UserAlreadyExists = "kullanıcı zaten mevcut";
+        public static string Registered = "Kullanıcı Başarılı bir sekilde kayıt oldu.";
+        public static string AccessTokenCreated = "Access Token Olusturuldu..";
+        public static string AuthorizationDenied = "yetkiniz yok";
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -16,6 +17,8 @@ namespace Business.Concrete
         {
             _customerDal = customerDal;
         }
+
+        [SecuredOperation("Kullanici")]
         public IResult Add(Customer Tentity)
         {
             _customerDal.Add(Tentity);
