@@ -1,4 +1,5 @@
 ﻿using Castle.DynamicProxy;
+using Core.Aspects.Autofact.Performance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace Core.Utilities.Interceptors.FluentValidation
             var methodAttributes = type.GetMethod(method.Name).GetCustomAttributes<MethodInterceptionBaseAttribute>(true);
 
             classAttributes.AddRange(methodAttributes);
+
+            classAttributes.Add(new PerformanceAspect(1));
 
             return classAttributes.OrderBy(p => p.Priority).ToArray();
 

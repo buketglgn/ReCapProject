@@ -2,6 +2,8 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofact.Caching;
+using Core.Aspects.Autofact.Transaction;
 using Core.Aspects.Autofact.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -22,6 +24,8 @@ namespace Business.Concrete
 
         }
 
+       // [TransactionalScopeAspect]
+        [CacheRemoveAspect("ICarService.Get")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
@@ -39,22 +43,26 @@ namespace Business.Concrete
 
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll());
 
         }
 
+        [CacheAspect]
         public IDataResult<Car> GetById(int CarId)
         {
             return new SuccessDataResult<Car>(_carDal.Get(p => p.Id == CarId));
         }
 
+        [CacheAspect]
         public IDataResult<List<DtoCarDetail>> GetCarDetail()
         {
             return new SuccessDataResult<List<DtoCarDetail>>(_carDal.GetCarDetails());
 
         }
+        [CacheAspect]
         public IDataResult<List<DtoCarDetail>> GetCarDetailById(int carId)
         {
           
@@ -63,18 +71,21 @@ namespace Business.Concrete
 
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetCarsByBrandId(int BrandId)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.BrandId == BrandId));
 
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetCarsByColorId(int ColorId)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == ColorId));
 
         }
 
+        [CacheRemoveAspect("ICarService.Get")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {

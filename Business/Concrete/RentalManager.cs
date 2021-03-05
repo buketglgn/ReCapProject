@@ -2,6 +2,7 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofact.Caching;
 using Core.Aspects.Autofact.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Business;
@@ -28,6 +29,7 @@ namespace Business.Concrete
             _rental = rental;
         }
 
+        [CacheRemoveAspect("IRentalService.Get")]
         [SecuredOperation("Kullanici")]
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental Tentity)
@@ -57,6 +59,7 @@ namespace Business.Concrete
 
         //bu metot çagrıldıgında arac teslim edildi.
         //teslim edilme tarihi verildi.
+        [CacheRemoveAspect("IRentalService.Get")]
         public IResult Deliver(int rentalId)
         {
             IResult results = BusinessRules.Run(CheckIfDeliver(rentalId));
@@ -69,33 +72,38 @@ namespace Business.Concrete
 
         }
 
+        [CacheAspect]
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rental.GetAll());
         }
 
+        [CacheAspect]
         public IDataResult<Rental> GetById(int Id)
         {
             return new SuccessDataResult<Rental>(_rental.Get(p => p.Id == Id));
         }
 
-
+        [CacheAspect]
         public IDataResult<List<Rental>> InUse()
         {
             return new SuccessDataResult<List<Rental>>(_rental.GetAll(p => p.ReturnDate == null));
         }
 
+        [CacheAspect]
         public IDataResult<List<Rental>> NotInUse()
         {
             return new SuccessDataResult<List<Rental>>(_rental.GetAll(p => p.ReturnDate != null));
         }
 
+        [CacheRemoveAspect("IRentalService.Get")]
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Update(Rental Tentity)
         {
             _rental.Update(Tentity);
             return new SuccessResult(Messages.RentalUpdated);
         }
+        [CacheAspect]
         public IDataResult<List<DtoRentalDetail>> GetRentalDetails()
         {
             return new SuccessDataResult<List<DtoRentalDetail>>(_rental.GetRentalDetails());
