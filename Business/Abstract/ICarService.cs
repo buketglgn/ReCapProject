@@ -9,8 +9,8 @@ namespace Business.Abstract
 {
    public interface ICarService: IEntityServiceBase<Car>
     {
-        IDataResult<List<Car>> GetCarsByColorId(int ColorId);
-        IDataResult<List<Car>> GetCarsByBrandId(int BrandId);
+        IDataResult<List<DtoCarDetail>> GetCarsByColorId(int ColorId);
+        IDataResult<List<DtoCarDetail>> GetCarsDetailByBrandId(int BrandId);
         IDataResult<List<DtoCarDetail>> GetCarDetail();
         IDataResult<List<DtoCarDetail>> GetCarDetailById(int carId);
 

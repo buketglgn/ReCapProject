@@ -18,7 +18,7 @@ namespace Core.Aspects.Autofact.Transaction
                     invocation.Proceed();
                     scope.Complete();
                 }
-                catch (System.Exception e)
+                catch (System.Exception )
                 {
                     scope.Dispose();
                     throw;

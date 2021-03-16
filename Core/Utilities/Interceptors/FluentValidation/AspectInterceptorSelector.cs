@@ -17,7 +17,7 @@ namespace Core.Utilities.Interceptors.FluentValidation
 
             classAttributes.AddRange(methodAttributes);
 
-            classAttributes.Add(new PerformanceAspect(1));
+            classAttributes.Add(new PerformanceAspect(8));
 
             return classAttributes.OrderBy(p => p.Priority).ToArray();
 

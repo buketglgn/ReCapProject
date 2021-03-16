@@ -18,9 +18,11 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _carDal;
-        public CarManager(ICarDal carDal)
+        ICarImageService _carImageService;
+        public CarManager(ICarDal carDal, ICarImageService carImageService)
         {
             _carDal = carDal;
+            _carImageService = carImageService;
 
         }
 
@@ -59,29 +61,28 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<DtoCarDetail>> GetCarDetail()
         {
+
             return new SuccessDataResult<List<DtoCarDetail>>(_carDal.GetCarDetails());
 
         }
         [CacheAspect]
         public IDataResult<List<DtoCarDetail>> GetCarDetailById(int carId)
         {
-          
-
             return new SuccessDataResult<List<DtoCarDetail>>(_carDal.GetCarDetails(p=>p.Id==carId));
 
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetCarsByBrandId(int BrandId)
+        public IDataResult<List<DtoCarDetail>> GetCarsDetailByBrandId(int BrandId)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.BrandId == BrandId));
+            return new SuccessDataResult<List<DtoCarDetail>>(_carDal.GetCarDetails(p => p.BrandId == BrandId));
 
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetCarsByColorId(int ColorId)
+        public IDataResult<List<DtoCarDetail>> GetCarsByColorId(int ColorId)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == ColorId));
+            return new SuccessDataResult<List<DtoCarDetail>>(_carDal.GetCarDetails(c => c.ColorId == ColorId));
 
         }
 
@@ -92,5 +93,7 @@ namespace Business.Concrete
             _carDal.Update(car);
             return new SuccessResult(Messages.CarUpdated);
         }
+
+        
     }
 }

@@ -76,9 +76,9 @@ namespace WebAPI.Controllers
             var result = _carImageService.GetAllImagesByCarId(Id);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [HttpGet("getImagesById")]
@@ -87,9 +87,9 @@ namespace WebAPI.Controllers
             var result = _carImageService.GetById(Id);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [HttpPost("delete")]
@@ -115,15 +115,6 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpGet("GetImageByCarID")]
-        public IActionResult GetImageByCarID(int carId)
-        {
-            var result = _carImageService.GetAllImagesByCarId(carId);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
+        
     }
 }

@@ -4,6 +4,7 @@ using Business.Constant;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Concrete.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -39,6 +40,11 @@ namespace Business.Concrete
         public IDataResult<Customer> GetById(int Id)
         {
             return new SuccessDataResult<Customer>(_customerDal.Get(p => p.UserId == Id));
+        }
+
+        public IDataResult<List<DtoCustomerDetail>> GetCustomersDetails()
+        {
+            return new SuccessDataResult<List<DtoCustomerDetail>>(_customerDal.GetCustomersDetail());
         }
 
         public IResult Update(Customer Tentity)
