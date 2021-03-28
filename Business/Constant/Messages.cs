@@ -37,5 +37,7 @@ namespace Business.Constant
         public static string Registered = "Kullanıcı Başarılı bir sekilde kayıt oldu.";
         public static string AccessTokenCreated = "Access Token Olusturuldu..";
         public static string AuthorizationDenied = "yetkiniz yok";
+        public static string RentalCheckIsCarReturnError = "araç kullanımda";
+        public static string RentalGetAllSuccess = "Tüm kiralanan araclar listeleniyor(detayları ile)";
     }
 }

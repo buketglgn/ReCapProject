@@ -26,7 +26,8 @@ namespace Business.Concrete
 
         }
 
-       // [TransactionalScopeAspect]
+        [SecuredOperation("admin")]
+        // [TransactionalScopeAspect]
         [CacheRemoveAspect("ICarService.Get")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
@@ -66,9 +67,14 @@ namespace Business.Concrete
 
         }
         [CacheAspect]
-        public IDataResult<List<DtoCarDetail>> GetCarDetailById(int carId)
+        public IDataResult<List<DtoCarDetail>> GetCarDetailByCarId(int carId)
         {
             return new SuccessDataResult<List<DtoCarDetail>>(_carDal.GetCarDetails(p=>p.Id==carId));
+
+        }
+        public IDataResult<List<DtoCarDetail>> GetbyBrandIdandColorId(int brandId ,int colorId)
+        {
+            return new SuccessDataResult<List<DtoCarDetail>>(_carDal.GetCarDetails(p => p.BrandId == brandId && p.ColorId == colorId));
 
         }
 

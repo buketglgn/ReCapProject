@@ -30,9 +30,9 @@ namespace WebAPI.Controllers
             var tokenCheck = _authService.CreateAccessToken(userToLogin.Data);
             if (tokenCheck.Success)
             {
-                return Ok(tokenCheck.Data); //üretilen token ın gösterilmesi gerek.
+                return Ok(tokenCheck); //üretilen token ın gösterilmesi gerek.
             }
-            return BadRequest(tokenCheck.Message);
+            return BadRequest(tokenCheck);
         }
 
         [HttpPost("register")]
@@ -41,16 +41,16 @@ namespace WebAPI.Controllers
             var userCheck = _authService.Exists(userForRegisterDTO.Email);
             if (!userCheck.Success)
             {
-                return BadRequest(userCheck.Message);
+                return BadRequest(userCheck);
             }
             //böyle bir email yok ise kayıt islemine devam edebilir
             var userToRegister = _authService.Register(userForRegisterDTO,userForRegisterDTO.Password);
             var tokenCheck = _authService.CreateAccessToken(userToRegister.Data);
             if (tokenCheck.Success)
             {
-                return Ok(tokenCheck.Data);
+                return Ok(tokenCheck);
             }
-            return BadRequest(tokenCheck.Message);
+            return BadRequest(tokenCheck);
         }
     }
 }

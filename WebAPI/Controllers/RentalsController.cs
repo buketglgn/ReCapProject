@@ -30,6 +30,18 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
+        [HttpGet("getalldetail")]
+        public IActionResult GetAllDetailDto()
+        {
+            var result = _rentalService.GetAllRentalDetail();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
@@ -40,16 +52,18 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
-        [HttpGet("getRentalDetails")]
-        public IActionResult GetRentalDetails()
+
+        [HttpGet("getbycarid")]
+        public IActionResult GetByCarId(int carId)
         {
-            var result = _rentalService.GetRentalDetails();
+            var result = _rentalService.GetByCarId(carId);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result.Message);
         }
+      
 
         [HttpPost("add")]
         public IActionResult Add(Rental rental)
@@ -73,10 +87,11 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+
         [HttpPost("deliver")]
-        public IActionResult Deliver(int id)
+        public IActionResult Deliver(Rental rental)
         {
-            var result = _rentalService.Deliver(id);
+            var result = _rentalService.Deliver(rental);
             if (result.Success)
             {
                 return Ok(result.Message);
@@ -96,25 +111,8 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpGet("notinuse")]
-        public IActionResult NotInUse()
-        {
-            var result = _rentalService.NotInUse();
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result.Message);
-        }
-        [HttpGet("inuse")]
-        public IActionResult InUse()
-        {
-            var result = _rentalService.InUse();
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result.Message);
-        }
+       
+
+       
     }
 }

@@ -15,8 +15,8 @@ namespace Entities.Concrete.DTOs
         public int ColorId { get; set; }
         public decimal DailyPrice { get; set; }
         public string ImagePath { get; set; }
-
-        public DateTime ModelYear { get; set; }
+        public bool RentalStatu { get; set; }
+        public int ModelYear { get; set; }
 
     }
 }

@@ -10,9 +10,11 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Concrete.DTOs;
+using Entities.DTOS;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -21,17 +23,19 @@ namespace Business.Concrete
     public class RentalManager : IRentalService
     {
         private IRentalDal _rental;
+        private ICarService _carService;
 
 
         //true müsaitlik anlamında;
-        public RentalManager(IRentalDal rental)
+        public RentalManager(IRentalDal rental, ICarService carService)
         {
             _rental = rental;
+            _carService = carService;
         }
 
         [CacheRemoveAspect("IRentalService.Get")]
-        [SecuredOperation("Kullanici")]
-        [ValidationAspect(typeof(RentalValidator))]
+       //[SecuredOperation("user,admin")]
+       [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental Tentity)
         {
             IResult results = BusinessRules.Run(CheckIfCarInUse(Tentity.CarId));
@@ -39,12 +43,12 @@ namespace Business.Concrete
             {
                 return results;
             }
-
-            _rental.Add(Tentity);
+            
+         _rental.Add(Tentity);
              return new SuccessResult(Messages.RentalAdded);
         }
 
-        //rental tablosundan silindi.
+        
         public IResult Delete(Rental rental)
         {
             IResult results = BusinessRules.Run(CheckIfDelete(rental.Id));
@@ -52,6 +56,7 @@ namespace Business.Concrete
             {
                 return results;
             }
+            
             _rental.Delete(rental);
             return new SuccessResult(Messages.RentalDeleted);
 
@@ -60,14 +65,14 @@ namespace Business.Concrete
         //bu metot çagrıldıgında arac teslim edildi.
         //teslim edilme tarihi verildi.
         [CacheRemoveAspect("IRentalService.Get")]
-        public IResult Deliver(int rentalId)
+        public IResult Deliver(Rental rental)
         {
-            IResult results = BusinessRules.Run(CheckIfDeliver(rentalId));
+            IResult results = BusinessRules.Run(CheckIfDeliver(rental.Id));
             if (results != null)
             {
                 return results;
             }
-
+            
             return new SuccessResult(Messages.RentalDelivered);
 
         }
@@ -83,18 +88,27 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<Rental>(_rental.Get(p => p.Id == Id));
         }
-
-        [CacheAspect]
-        public IDataResult<List<Rental>> InUse()
+        public IDataResult<Rental> GetByCarId(int carId)
         {
-            return new SuccessDataResult<List<Rental>>(_rental.GetAll(p => p.ReturnDate == null));
+            return new SuccessDataResult<Rental>(_rental.Get(p => p.CarId == carId));
         }
 
         [CacheAspect]
-        public IDataResult<List<Rental>> NotInUse()
+        public IDataResult<RentalDetailDto> GetRentalDetailByCarId(int carId)
         {
-            return new SuccessDataResult<List<Rental>>(_rental.GetAll(p => p.ReturnDate != null));
+
+            var result = _rental.GetRentalDetails(r => r.CarId == carId).LastOrDefault();
+            return new SuccessDataResult<RentalDetailDto>(result, Messages.RentalGetAllSuccess);
         }
+
+        [CacheAspect]
+        public IDataResult<List<RentalDetailDto>> GetAllRentalDetail()
+        {
+            return new SuccessDataResult<List<RentalDetailDto>>(_rental.GetRentalDetails(),
+                Messages.RentalGetAllSuccess);
+        }
+
+
 
         [CacheRemoveAspect("IRentalService.Get")]
         [ValidationAspect(typeof(RentalValidator))]
@@ -103,22 +117,20 @@ namespace Business.Concrete
             _rental.Update(Tentity);
             return new SuccessResult(Messages.RentalUpdated);
         }
-        [CacheAspect]
-        public IDataResult<List<DtoRentalDetail>> GetRentalDetails()
-        {
-            return new SuccessDataResult<List<DtoRentalDetail>>(_rental.GetRentalDetails());
-
-
-        }
+       
 
         private IResult CheckIfCarInUse(int carId)
         {
             //bu degerlere sahip bir sey döndürüyorsa arac kullanımdadır
-            var result = _rental.Get(p => p.CarId ==carId && p.ReturnDate == null);
-            if (result != null)
+            var results = _rental.GetAll(r => r.CarId == carId);
+            foreach (var result in results)
             {
-                return new ErrorResult(Messages.RentalBusy);
+                if (result.ReturnDate == null || result.RentDate > result.ReturnDate)
+                {
+                    return new ErrorResult(Messages.RentalCheckIsCarReturnError);
+                }
             }
+
             return new SuccessResult();
 
         }
@@ -130,10 +142,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.NoRecording);
             }
-            if (result.ReturnDate == null)
-            {
-                return new ErrorResult(Messages.RentalBusy);
-            }
+           
             return new SuccessResult();
         }
 
@@ -148,5 +157,7 @@ namespace Business.Concrete
             Update(result);
             return new SuccessResult();
         }
+
+       
     }
 }

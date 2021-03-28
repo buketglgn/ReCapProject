@@ -32,7 +32,7 @@ namespace ConsoleUI
             //}
 
 
-            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+           // RentalManager rentalManager = new RentalManager(new EfRentalDal());
 
             //foreach (var rentalDetail in rentalManager.GetRentalDetails().Data)
             //{

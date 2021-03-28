@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
@@ -37,6 +38,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+       // [SecuredOperation("user")]
         public IDataResult<User> Login(UserForLoginDTO userForLogin)
         {
             var userToCheck = _userService.GetByEmail(userForLogin.Email);
@@ -51,6 +53,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(userToCheck, Messages.SuccessfulLogin);
         }
 
+        //[SecuredOperation("user")]
         public IDataResult<User> Register(UserForRegisterDTO userForRegister, string password)
         {
             byte[] passwordHash, passwordSalt;

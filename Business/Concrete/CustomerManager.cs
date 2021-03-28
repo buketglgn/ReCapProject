@@ -19,7 +19,7 @@ namespace Business.Concrete
             _customerDal = customerDal;
         }
 
-        [SecuredOperation("Kullanici")]
+        //[SecuredOperation("Kullanici")]
         public IResult Add(Customer Tentity)
         {
             _customerDal.Add(Tentity);
