@@ -37,8 +37,18 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
+        public IResult ExistsId(int Id)
+        {
+            var user = _userService.GetById(Id);
+            if (user != null)
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult("kullanıcı bulunamadı");
+        }
 
-       // [SecuredOperation("user")]
+
+
         public IDataResult<User> Login(UserForLoginDTO userForLogin)
         {
             var userToCheck = _userService.GetByEmail(userForLogin.Email);
@@ -53,7 +63,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(userToCheck, Messages.SuccessfulLogin);
         }
 
-        //[SecuredOperation("user")]
+       
         public IDataResult<User> Register(UserForRegisterDTO userForRegister, string password)
         {
             byte[] passwordHash, passwordSalt;
@@ -72,6 +82,25 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(user, Messages.Registered);
 
             
+        }
+
+        public IDataResult<User> Update(UserForUpdateDto userForUpdate, string password)
+        {
+            byte[] passwordHash, passwordSalt;
+            HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            var user = new User
+            {
+              Id= userForUpdate.Id,
+                Email = userForUpdate.Email,
+                FirstName = userForUpdate.FirstName,
+                LastName = userForUpdate.LastName,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                Status = true
+
+            };
+            _userService.Update(user);
+            return new SuccessDataResult<User>(user, Messages.Registered);
         }
     }
 }

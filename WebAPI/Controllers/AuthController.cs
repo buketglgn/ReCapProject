@@ -52,5 +52,23 @@ namespace WebAPI.Controllers
             }
             return BadRequest(tokenCheck);
         }
+
+        [HttpPost("update")]
+        public ActionResult Update(UserForUpdateDto userForUpdateDto)
+        {
+            var userCheck = _authService.ExistsId(userForUpdateDto.Id);
+            if (!userCheck.Success)
+            {
+                return BadRequest(userCheck);
+            }
+            
+            var userToUpdate = _authService.Update(userForUpdateDto, userForUpdateDto.Password);
+            var tokenCheck = _authService.CreateAccessToken(userToUpdate.Data);
+            if (tokenCheck.Success)
+            {
+                return Ok(tokenCheck);
+            }
+            return BadRequest(tokenCheck);
+        }
     }
 }

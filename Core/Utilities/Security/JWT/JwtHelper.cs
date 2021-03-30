@@ -59,7 +59,7 @@ namespace Core.Utilities.Security.JWT
             var claims = new List<Claim>();
             //claims.Add(new Claim("email", user.Email));
             claims.AddEmail(user.Email);
-            claims.AddName($"{user.FirstName}{user.LastName}");
+            claims.AddName($"{user.FirstName}"+" "+$"{user.LastName}");
             claims.AddNameIdentifier(user.Id.ToString());
             claims.AddRoles(operationClaims.Select(c => c.Name).ToArray());
 
