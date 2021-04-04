@@ -34,6 +34,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  ColorName = co.ColorName,
                                  DailyPrice = c.DailyPrice,
                                  ModelYear = c.ModelYear,
+                                 MinFindexScore=c.MinFindexScore,
                                  ImagePath = (from a in context.CarImages where a.CarId == c.Id select a.ImagePath).FirstOrDefault()
 
                              };

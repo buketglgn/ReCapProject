@@ -39,5 +39,11 @@ namespace Business.Constant
         public static string AuthorizationDenied = "yetkiniz yok";
         public static string RentalCheckIsCarReturnError = "araç kullanımda";
         public static string RentalGetAllSuccess = "Tüm kiralanan araclar listeleniyor(detayları ile)";
+        public static string CreditCardAdded = "Kredi Kartı Eklendi";
+        public static string CreditCardDeleted = "Kredi Kartı Silindi";
+        public static string CreditCardUpdated = "Kredi Kartı Güncellendi";
+        public static string FindexAdded = "findex eklendi";
+        public static string FindexDeleted = "findex silindi";
+        public static string FindexUpdated = "findex güncellendi";
     }
 }

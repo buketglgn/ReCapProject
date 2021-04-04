@@ -17,6 +17,6 @@ namespace Entities.Concrete.DTOs
         public string ImagePath { get; set; }
         public bool RentalStatu { get; set; }
         public int ModelYear { get; set; }
-
+        public int MinFindexScore { get; set; }
     }
 }

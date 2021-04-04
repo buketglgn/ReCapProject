@@ -101,6 +101,12 @@ namespace Business.Concrete
             return new SuccessDataResult<RentalDetailDto>(result, Messages.RentalGetAllSuccess);
         }
 
+        public IDataResult<List<RentalDetailDto>> GetRentalsDetailByUserId(int userId)
+        {
+            var result = _rental.GetRentalDetails(r => r.UserId == userId).ToList();
+            return new SuccessDataResult<List<RentalDetailDto>>(result, Messages.RentalGetAllSuccess);
+        }
+
         [CacheAspect]
         public IDataResult<List<RentalDetailDto>> GetAllRentalDetail()
         {
@@ -158,6 +164,6 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-       
+        
     }
 }
